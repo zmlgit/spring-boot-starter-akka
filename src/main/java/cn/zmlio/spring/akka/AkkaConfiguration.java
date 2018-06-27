@@ -21,7 +21,7 @@ public class AkkaConfiguration {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @Bean
+    @Bean(destroyMethod = "terminate")
     public ActorSystem actorSystem() {
         ActorSystem actorSystem = ActorSystem.create(akkaProperties.getSystemName(), akkaConfiguration());
         SpringExtProvider.get(actorSystem).initialize(applicationContext);
