@@ -4,7 +4,6 @@ import akka.actor.ActorSystem;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import static cn.zmlio.spring.akka.SpringExtension.SpringExtProvider;
 
 @Configuration
-@ConfigurationProperties(prefix = "spring.akka.")
 @EnableConfigurationProperties(AkkaProperties.class)
 public class AkkaConfiguration {
 
@@ -25,13 +23,14 @@ public class AkkaConfiguration {
 
     @Bean
     public ActorSystem actorSystem() {
-        ActorSystem actorSystem = ActorSystem.create(akkaProperties.getSystemName());
+        ActorSystem actorSystem = ActorSystem.create(akkaProperties.getSystemName(), akkaConfiguration());
         SpringExtProvider.get(actorSystem).initialize(applicationContext);
         return actorSystem;
     }
 
     @Bean
     public Config akkaConfiguration() {
-        return ConfigFactory.load();
+        Config config = ConfigFactory.parseMap(akkaProperties.getConfig()).withFallback(ConfigFactory.load());
+        return config;
     }
 }
