@@ -4,6 +4,9 @@ import akka.actor.Actor;
 import akka.actor.IndirectActorProducer;
 import org.springframework.context.ApplicationContext;
 
+/**
+ * @author zml
+ */
 public class SpringActorProducer implements IndirectActorProducer {
     final private ApplicationContext applicationContext;
     final private String actorBeanName;
@@ -19,6 +22,7 @@ public class SpringActorProducer implements IndirectActorProducer {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Class<? extends Actor> actorClass() {
         return (Class<? extends Actor>) applicationContext.getType(actorBeanName);
     }
