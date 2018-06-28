@@ -2,7 +2,6 @@ package cn.zmlio.spring.akka;
 
 import akka.actor.ActorSystem;
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -10,16 +9,25 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import static cn.zmlio.spring.akka.SpringExtension.SpringExtProvider;
+import static com.typesafe.config.ConfigFactory.load;
+import static com.typesafe.config.ConfigFactory.parseMap;
 
+/**
+ * @author zml
+ */
 @Configuration
 @EnableConfigurationProperties(AkkaProperties.class)
 public class AkkaConfiguration {
 
-    @Autowired
-    private AkkaProperties akkaProperties;
+    private final AkkaProperties akkaProperties;
+
+    private final ApplicationContext applicationContext;
 
     @Autowired
-    private ApplicationContext applicationContext;
+    public AkkaConfiguration(AkkaProperties akkaProperties, ApplicationContext applicationContext) {
+        this.akkaProperties = akkaProperties;
+        this.applicationContext = applicationContext;
+    }
 
     @Bean(destroyMethod = "terminate")
     public ActorSystem actorSystem() {
@@ -30,7 +38,6 @@ public class AkkaConfiguration {
 
     @Bean
     public Config akkaConfiguration() {
-        Config config = ConfigFactory.parseMap(akkaProperties.getConfig()).withFallback(ConfigFactory.load());
-        return config;
+        return parseMap(akkaProperties.getConfig()).withFallback(load());
     }
 }

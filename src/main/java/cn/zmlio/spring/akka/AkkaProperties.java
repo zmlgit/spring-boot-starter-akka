@@ -6,6 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * @author zml
+ */
 @ConfigurationProperties(prefix = "spring.akka.")
 @Data
 public class AkkaProperties {
