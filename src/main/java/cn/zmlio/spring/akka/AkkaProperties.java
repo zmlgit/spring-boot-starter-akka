@@ -9,9 +9,9 @@ import java.util.TreeMap;
 /**
  * @author zml
  */
-@ConfigurationProperties(prefix = "spring.akka.")
+@ConfigurationProperties(prefix = "spring")
 @Data
 public class AkkaProperties {
     private String systemName;
-    private Map<String, Object> config = new TreeMap<>();
+    private Map<String, Object> akka = new TreeMap<>();
 }
